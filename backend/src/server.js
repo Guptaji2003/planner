@@ -1,21 +1,23 @@
-// Import the express library
-const express = require('express');
-// Create an instance of the express application
+import express from "express";
+import dotenv from "dotenv";
+
+import connectDB from "./DataBase/db.js";
+dotenv.config();
+
 const app = express();
-// Define the port number the server will listen on
-const PORT = 3000;
 
-// Define a route for the homepage (GET request to '/')
-app.get('/', (req, res) => {
-  res.send('<h1>Hello, Express.js Server!</h1>');
+// middleware to read JSON
+app.use(express.json());
+
+const PORT = process.env.PORT || 5000;
+
+// basic route
+app.get("/", (req, res) => {
+  res.send("Server is running successfully");
 });
 
-// Define another route (GET request to '/about')
-app.get('/about', (req, res) => {
-  res.send('This is the about page.');
-});
-
-// Start the server and listen for incoming requests on the specified port
+// server function
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log("Server is running on port 5000");
+  connectDB();
 });
