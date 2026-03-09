@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-
+import userRoutes from "./Routes/userRoute.js";
 import connectDB from "./DataBase/db.js";
 dotenv.config();
 
@@ -11,10 +11,11 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-// basic route
-app.get("/", (req, res) => {
-  res.send("Server is running successfully");
-});
+
+// connect routes
+app.use("/api/users", userRoutes);
+
+
 
 // server function
 app.listen(PORT, () => {

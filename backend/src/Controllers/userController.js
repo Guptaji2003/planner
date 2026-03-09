@@ -1,5 +1,5 @@
-import User from "../models/User.js";
-import bcrypt from "bcryptjs";
+import User from "../Model/userModel.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 /* ================= REGISTER USER ================= */
@@ -77,16 +77,19 @@ export const loginUser = async (req, res) => {
 };
 
 
-/* ================= GET ALL USERS ================= */
 
-export const getUsers = async (req, res) => {
+
+
+/* ================= Log out ================= */
+
+export const logoutUser = (req, res) => {
   try {
-
-    const users = await User.find().select("-password");
-
-    res.json(users);
-
+    res.status(200).json({
+      message: "User logged out successfully"
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 };
