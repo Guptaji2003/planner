@@ -2,12 +2,15 @@ import express from "express";
 import dotenv from "dotenv";
 import userRoutes from "./Routes/userRoute.js";
 import connectDB from "./DataBase/db.js";
+import cookieParser from "cookie-parser"; 
 dotenv.config();
 
 const app = express();
 
+
 // middleware to read JSON
 app.use(express.json());
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 5000;
 

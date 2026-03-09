@@ -1,30 +1,24 @@
 import jwt from "jsonwebtoken";
 
 export const authMiddleware = (req, res, next) => {
-  try {
+   try {
 
-    // get token from header
-    const token = req.headers.authorization;
+    const token = req.cookies.token;
 
     if (!token) {
       return res.status(401).json({
-        message: "Access denied. No token provided."
+        message: "No token provided"
       });
     }
 
-    // remove Bearer from token
-    const actualToken = token.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-    // verify token
-    const decoded = jwt.verify(actualToken, "secretkey");
-
-    // attach user info to request
     req.user = decoded;
 
     next();
 
   } catch (error) {
-    return res.status(401).json({
+    res.status(401).json({
       message: "Invalid token"
     });
   }

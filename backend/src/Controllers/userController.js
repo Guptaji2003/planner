@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password} = req.body;
 
     // check if user already exists
     const existingUser = await User.findOne({ email });
@@ -22,8 +22,7 @@ export const registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
-      role,
+      password: hashedPassword
     });
 
     res.status(201).json({
@@ -61,11 +60,15 @@ export const loginUser = async (req, res) => {
     // generate token
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      "secretkey",
+      process.env.SECRET_KEY,
       { expiresIn: "1d" }
     );
 
-    res.json({
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000 // 1 day
+    }).json({
       message: "Login successful",
       token,
       user,
@@ -84,6 +87,7 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = (req, res) => {
   try {
+    // res.clearCookie("token")
     res.status(200).json({
       message: "User logged out successfully"
     });
